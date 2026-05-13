@@ -111,4 +111,4 @@ et celle des sillons, et la campagne ainsi ressemble à un grand manteau dépli�
 
 ## Context
 
-Developed as part of the **INF371** course at École Polytechnique.  
+Developed as part of the **INF371** course at École polytechnique.  
