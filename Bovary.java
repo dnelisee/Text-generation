@@ -1,4 +1,6 @@
 public class Bovary {
+
+    static int n = 3; 
     
     static HMap buildTable(String[] files, int n) {
         HMap table = new HMap();
@@ -54,7 +56,15 @@ public class Bovary {
             files[i - 1] = "bovary/" + i + ".txt"; 
         }
 
-        HMap table = buildTable(files, 3); 
-        generate(table, 3);
+        if (args.length != 0) {
+            try {
+                n = Integer.parseInt(args[0]);
+            } catch(NumberFormatException e) {
+                throw new RuntimeException("Please the parameter must be an integer");
+            }
+        }
+
+        HMap table = buildTable(files, n); 
+        generate(table, n);
     }
 }
