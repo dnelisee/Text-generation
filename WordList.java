@@ -1,16 +1,34 @@
+/**
+ * WordList — liste chaînée de mots, avec accès de haut niveau.
+ *
+ * Encapsule un Node pour représenter un multiensemble de mots :
+ * c'est la valeur associée à chaque préfixe dans la table de hachage HMap.
+ * Contrairement à Node, WordList gère correctement les cas limites (liste vide,
+ * insertion/suppression en tête ou en queue) sans exposer les maillons.
+ */
 public class WordList {
+    // Instance de test : ["foo", "bar", "baz"]
     public static WordList foobar = new WordList("foo", new WordList("bar", new WordList("baz", new WordList())));
 
-    Node content;
+    Node content; // tête de la chaîne de maillons, null si liste vide
 
+    /** Construit une liste vide. */
     WordList() {
         content = null;
     }
 
+    /**
+     * Construit une liste à partir d'un premier mot et d'une liste existante.
+     * Le nouveau mot est placé en tête de la chaîne de next.
+     */
     WordList(String head, WordList next) {
         content = new Node(head, next.content);
     }
 
+    /**
+     * Construit une liste à partir d'un tableau de chaînes.
+     * L'ordre des éléments du tableau est conservé.
+     */
     WordList(String[] t) {
 
         content = null;
@@ -20,6 +38,7 @@ public class WordList {
         }
     }
 
+    /** Retourne le nombre de mots dans la liste. */
     int length() {
         if (content == null)
             return 0;
@@ -27,10 +46,12 @@ public class WordList {
             return Node.length(content);
     }
 
+    /** Retourne une représentation lisible de la liste, ex. "[foo, bar, baz]". */
     public String toString() {
         return Node.makeString(content);
     }
 
+    /** Ajoute w en tête de liste. */
     void addFirst(String w) {
         if (this.content == null) {
             this.content = new Node(w, null);
@@ -38,6 +59,7 @@ public class WordList {
             this.content = new Node(w, this.content);
     }
 
+    /** Ajoute w en queue de liste. */
     void addLast(String w) {
         if (this.content == null) {
             this.content = new Node(w, null);
@@ -45,6 +67,10 @@ public class WordList {
             Node.addLast(w, this.content);
     }
 
+    /**
+     * Retire et retourne le premier mot de la liste.
+     * Retourne null si la liste est vide.
+     */
     String removeFirst() {
         if (content == null)
             return null;
@@ -55,6 +81,10 @@ public class WordList {
         return res;
     }
 
+    /**
+     * Retire et retourne le dernier mot de la liste.
+     * Retourne null si la liste est vide.
+     */
     String removeLast() {
         if (content == null)
             return null;
@@ -75,14 +105,22 @@ public class WordList {
         return res;
     }
 
+    /** Insère s dans la liste en conservant l'ordre lexicographique. */
     void insert(String s) {
         content = Node.insert(s, content);
     }
 
+    /** Trie la liste par ordre lexicographique via un tri par insertion (complexité quadratique). */
     void insertionSort() {
         content = Node.insertionSort(content);
     }
 
+    /**
+     * Trie la liste via un tri rapide récursif (en place).
+     * Le pivot est le premier élément ; les éléments inférieurs sont regroupés
+     * dans firstPart, les autres dans secondPart, puis les deux parties sont
+     * triées récursivement et fusionnées.
+     */
     void mergeSort() {
         /*
          * La strategie est de diviser pour regner.
@@ -133,6 +171,11 @@ public class WordList {
         this.content = Node.merge(firstPart.content, secondPart.content);
     }
 
+    /**
+     * Convertit la liste en tableau de chaînes, dans l'ordre de la liste.
+     * Utilisé dans Bovary.generate() pour piocher un mot au hasard via un index entier.
+     * Retourne un tableau vide si la liste est vide.
+     */
     String[] toArray() {
         if (content == null) return new String[0]; 
         String[] res = new String[this.length()]; 
